@@ -1,0 +1,29 @@
+repos:
+-   repo: https://github.com/hades/pre-commit-hooks
+    rev: 42bc79146f8b566f640ff773057d48a9416763a7
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: check-toml
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: a6ff26895e5ae243a36999ba87eb6b4af3c202b3
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+- repo: local
+  hooks:
+    - id: pytype
+      name: Checking Python typings with pytype
+      entry: poetry run pytype -j auto --keep-going
+      language: system
+      pass_filenames: false
+      types: [python]
+    - id: pytest
+      name: Running unit tests
+      entry: poetry run pytest -q
+      language: system
+      pass_filenames: false
+      types: [python]

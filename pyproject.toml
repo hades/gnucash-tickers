@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "gnucash-tickers"
+version = "1.0.0"
+description = "External securities editor for Gnucash."
+authors = ["Edward Toroshchyn <dev@hades.name>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+cleo = "^2.1.0"
+tomlkit = "^0.12.3"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.5.0"
+pylint = "^3.0.2"
+pytest = "^7.4.3"
+pytype = "^2023.11.29"
+ruff = "^0.1.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytype]
+inputs = [ '.' ]
+overriding_renamed_parameter_count_checks = true
+strict_none_binding = true
+strict_parameter_checks = true
+strict_primitive_comparisons = true
+strict_undefined_checks = true
+
+[tool.ruff]
+line-length = 120
+indent-width = 2
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["B", "C4", "DTZ", "E", "F", "G", "I", "N", "UP", "W"]
