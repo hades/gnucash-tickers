@@ -27,10 +27,11 @@ Feel free to add instructions for your operating system.
 
 Ubuntu:
 
-```
+```sh
 $ sudo apt-get install python3-gnucash python3-poetry gnucash
 $ poetry config virtualenvs.options.system-site-packages true
 $ poetry install --without=dev
+```
 
 Running
 -------
