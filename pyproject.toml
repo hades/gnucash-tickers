@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "gnucash-tickers"
+name = "tickers"
 version = "1.0.0"
 description = "External securities editor for Gnucash."
 authors = ["Edward Toroshchyn <dev@hades.name>"]
