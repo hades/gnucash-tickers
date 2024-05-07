@@ -29,6 +29,14 @@ class GnucashWrapper:
       return gnucash.Session(book_filename)
     return GnucashWrapper(opener)
 
+  def add_securities(self, book_filename, securities: list[Security]):
+    with self.opener(book_filename) as session:
+      book = session.book
+      table = book.get_table()
+      for s in securities:
+        table.insert(gnucash.GncCommodity(book, s.full_name, s.namespace,
+                                          s.display_symbol, s.isin, s.fraction_reciprocal))
+
   def iter_securities(self, book_filename) -> Generator[Security, None, None]:
     with self.opener(book_filename) as session:
       book = session.book

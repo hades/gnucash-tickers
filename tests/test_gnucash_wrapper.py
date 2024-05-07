@@ -1,7 +1,8 @@
 import contextlib
 from unittest import TestCase
-from unittest.mock import Mock
+from unittest.mock import Mock, call, patch
 
+from tickers.data import Security
 from tickers.gnucash_wrapper import GnucashWrapper
 
 
@@ -34,6 +35,9 @@ def mock_book(commodity_table):
 
 def mock_opener(book):
   return Mock(return_value=contextlib.closing(MockSession(book)))
+
+def fake_gnc_commodity(*args):
+  return tuple(args)
 
 class TestGnucashWrapper(TestCase):
   def test_iter_securities(self):
@@ -79,3 +83,18 @@ class TestGnucashWrapper(TestCase):
     self.assertEqual(securities[4].namespace, 'FRANKFURT')
     self.assertEqual(securities[4].isin, '')
     self.assertEqual(securities[4].fraction_reciprocal, 1)
+
+  @patch('gnucash.GncCommodity', new=fake_gnc_commodity)
+  def test_add_securities(self):
+    book = mock_book({})
+    wrapper = GnucashWrapper(mock_opener(book))
+    wrapper.add_securities("book.gnucash", [
+      Security(full_name='Horns & Hooves Co.', symbol='HHVS', display_symbol='HORNS', namespace='NASDAQ',
+               isin='US012345', fraction_reciprocal=100),
+      Security(full_name='Very Good Construction Co.', symbol='VERY', display_symbol='VG', namespace='NASDAQ',
+               isin='US000010', fraction_reciprocal=1),
+    ])
+    book.get_table().insert.assert_has_calls([
+      call((book, 'Horns & Hooves Co.', 'NASDAQ', 'HORNS', 'US012345', 100)),
+      call((book, 'Very Good Construction Co.', 'NASDAQ', 'VG', 'US000010', 1)),
+    ])
